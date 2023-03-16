@@ -4,30 +4,32 @@
 <center><h3>Flight Finder</h3></center>
 
 <div id="finder">
-<div class="from">
-    <label> From: </label>
-    <input type="text"
-           class="location-field"
-           placeholder="Any" 
-           />
+    <div class="from">
+        <label> From: </label>
+        <input type="text"
+               class="location-field"
+               placeholder="Any" />
+    </div>
+
+    <div class="to">
+        <label> To: </label>
+        <input type="text"
+               class="location-field"
+               placeholder="Any" />
+    </div>
+
+    <div class="day">
+        <label> Day: </label>
+        <input type="text"
+               class="day-field"
+               placeholder="Any" />
+    </div>
+
+    <button type="button" class="btn">Find Flights</button>
 </div>
 
-<div class="to">
-    <label> To: </label>
-    <input type="text"
-           class="location-field"
-           placeholder="Any" />
-</div>
 
-<div class="day">
-    <label> Day: </label>
-    <input type="text"
-           class="day-field"
-           placeholder="Any" />
-</div>
 
-<button type ="button" class="btn">Find Flights</button>
-</div>
 
 
 <center><h3>Flights</h3></center>
@@ -93,9 +95,14 @@
            placeholder="Citizenship" />
 </div>
 
-<div class="reserve">
-    <button type="button" class="btn">Reserve</button>
+<div class="reserve reserve-btn">
+    <button type="button" class="btn">Reserve</button><br />
+    <div class="reservation-code">
+        <span>Reservation code: </span>
+    </div>
 </div>
+
+
 
 
 
