@@ -86,6 +86,14 @@
         {
             flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport && f.ToCity == SelectedToAirport).ToList();
         }
+        else if (!string.IsNullOrEmpty(selectedFromAirport) && !string.IsNullOrEmpty(selectedTravelDate))
+        {
+            flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport && f.Day == selectedTravelDate).ToList();
+        }
+        else if (!string.IsNullOrEmpty(SelectedToAirport) && !string.IsNullOrEmpty(selectedTravelDate))
+        {
+            flights = Flightmanager.GetFlights().Where(f => f.FromCity == SelectedToAirport && f.Day == selectedTravelDate).ToList();
+        }
         else if (!string.IsNullOrEmpty(selectedFromAirport))
         {
             flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport).ToList();
@@ -93,6 +101,11 @@
         else if (!string.IsNullOrEmpty(SelectedToAirport))
         {
             flights = Flightmanager.GetFlights().Where(f => f.ToCity == SelectedToAirport).ToList();
+        }
+        else if (!string.IsNullOrEmpty(selectedTravelDate))
+        {
+            // If travel date is selected, filter flights based on FromCity, ToCity and Day
+            flights = Flightmanager.GetFlights().Where(f => f.Day == selectedTravelDate).ToList();
         }
         else
         {
