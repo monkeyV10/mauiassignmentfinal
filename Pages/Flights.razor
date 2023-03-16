@@ -78,40 +78,35 @@
 
     private void FindFlights()
     {
-        if (!string.IsNullOrEmpty(selectedFromAirport) && !string.IsNullOrEmpty(SelectedToAirport) && !string.IsNullOrEmpty(selectedTravelDate))
+        var filteredFlights = new List<Flight123>();
+
+        
+        foreach (var flight in Flightmanager.GetFlights())
         {
-            flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport && f.ToCity == SelectedToAirport && f.Day == selectedTravelDate).ToList();
-        }
-        else if (!string.IsNullOrEmpty(selectedFromAirport) && !string.IsNullOrEmpty(SelectedToAirport))
-        {
-            flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport && f.ToCity == SelectedToAirport).ToList();
-        }
-        else if (!string.IsNullOrEmpty(selectedFromAirport) && !string.IsNullOrEmpty(selectedTravelDate))
-        {
-            flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport && f.Day == selectedTravelDate).ToList();
-        }
-        else if (!string.IsNullOrEmpty(SelectedToAirport) && !string.IsNullOrEmpty(selectedTravelDate))
-        {
-            flights = Flightmanager.GetFlights().Where(f => f.FromCity == SelectedToAirport && f.Day == selectedTravelDate).ToList();
-        }
-        else if (!string.IsNullOrEmpty(selectedFromAirport))
-        {
-            flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport).ToList();
-        }
-        else if (!string.IsNullOrEmpty(SelectedToAirport))
-        {
-            flights = Flightmanager.GetFlights().Where(f => f.ToCity == SelectedToAirport).ToList();
-        }
-        else if (!string.IsNullOrEmpty(selectedTravelDate))
-        {
-            // If travel date is selected, filter flights based on FromCity, ToCity and Day
-            flights = Flightmanager.GetFlights().Where(f => f.Day == selectedTravelDate).ToList();
-        }
-        else
-        {
-            flights = new List<Flight123>();
+            
+            if (!string.IsNullOrEmpty(selectedFromAirport) && flight.FromCity != selectedFromAirport)
+            {
+                continue;
+            }
+
+            
+            if (!string.IsNullOrEmpty(SelectedToAirport) && flight.ToCity != SelectedToAirport)
+            {
+                continue;
+            }
+
+            
+            if (!string.IsNullOrEmpty(selectedTravelDate) && flight.Day != selectedTravelDate)
+            {
+                continue;
+            }
+
+            
+            filteredFlights.Add(flight);
         }
 
+        
+        flights = filteredFlights;
         showFlights = flights.Any();
     }
 
