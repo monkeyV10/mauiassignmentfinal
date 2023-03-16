@@ -10,4 +10,15 @@
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
+
+}
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
