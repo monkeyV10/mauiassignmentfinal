@@ -11,9 +11,9 @@
         <select class="location-field" id="fromAirport" @bind="@selectedFromAirport">
             <option value="">Any</option>
             <!-- Loop through the list of airports and create an option element for each one -->
-            @foreach (var airport in AirportManager.GetAirports())
+            @foreach (var flight in Flightmanager.GetFlights())
             {
-                <option value="@airport.AirportName">@airport.Shortform</option>
+                <option value="@flight.FromCity">@flight.FromCity</option>
             }
         </select>
     </div>
@@ -23,9 +23,9 @@
         <select class="location-field" id="toAirport" @bind="@SelectedToAirport">
             <option value="">Any</option>
             <!-- Loop through the list of airports and create an option element for each one -->
-            @foreach (var airport in AirportManager.GetAirports())
+            @foreach (var flight in Flightmanager.GetFlights())
             {
-                <option value="@airport.AirportName">@airport.Shortform</option>
+                <option value="@flight.ToCity">@flight.ToCity</option>
             }
         </select>
     </div>
@@ -78,18 +78,27 @@
 
     private void FindFlights()
     {
-        if (selectedTravelDate == null)
+        if (!string.IsNullOrEmpty(selectedFromAirport) && !string.IsNullOrEmpty(SelectedToAirport) && !string.IsNullOrEmpty(selectedTravelDate))
         {
-            // If travel date is not selected, show all flights
-            flights = Flightmanager.GetFlights();
+            flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport && f.ToCity == SelectedToAirport && f.Day == selectedTravelDate).ToList();
+        }
+        else if (!string.IsNullOrEmpty(selectedFromAirport) && !string.IsNullOrEmpty(SelectedToAirport))
+        {
+            flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport && f.ToCity == SelectedToAirport).ToList();
+        }
+        else if (!string.IsNullOrEmpty(selectedFromAirport))
+        {
+            flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport).ToList();
+        }
+        else if (!string.IsNullOrEmpty(SelectedToAirport))
+        {
+            flights = Flightmanager.GetFlights().Where(f => f.ToCity == SelectedToAirport).ToList();
         }
         else
         {
-            // If travel date is selected, filter flights based on FromCity, ToCity and Day
-            flights = Flightmanager.GetFlights()
-                        .Where(f => f.Day == selectedTravelDate)
-                        .ToList();
+            flights = new List<Flight123>();
         }
+
         showFlights = flights.Any();
     }
 
@@ -113,7 +122,7 @@
         </select>
     </div>
 }
-else
+else if (string.IsNullOrEmpty(selectedFromAirport) || string.IsNullOrEmpty(SelectedToAirport) || string.IsNullOrEmpty(selectedTravelDate))
 {
     <div class="flights">
         <label>Select a flight:</label>
@@ -122,6 +131,16 @@ else
         </select>
     </div>
 }
+else
+{
+    <div class="flights">
+        <label>Select a flight:</label>
+        <select class="flights-field" name="flightCode">
+            <option value="">There are no flights</option>
+        </select>
+    </div>
+}
+
 
 
 
