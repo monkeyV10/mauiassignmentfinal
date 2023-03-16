@@ -83,37 +83,29 @@
         
         foreach (var flight in Flightmanager.GetFlights())
         {
-            
             if (!string.IsNullOrEmpty(selectedFromAirport) && flight.FromCity != selectedFromAirport)
             {
                 continue;
             }
 
-            
             if (!string.IsNullOrEmpty(SelectedToAirport) && flight.ToCity != SelectedToAirport)
             {
                 continue;
             }
 
-            
             if (!string.IsNullOrEmpty(selectedTravelDate) && flight.Day != selectedTravelDate)
             {
                 continue;
             }
 
-            
             filteredFlights.Add(flight);
         }
 
-        
         flights = filteredFlights;
         showFlights = flights.Any();
     }
 
-
 }
-
-
 
 
 <center><h3>Flights</h3></center>
@@ -148,9 +140,6 @@ else
         </select>
     </div>
 }
-
-
-
 
 
 <h3 class="reserve-title">Reserve</h3>
