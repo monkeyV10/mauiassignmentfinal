@@ -1,44 +1,58 @@
-﻿@page "/Flights"
+﻿@using MauiApp1.Data
+
+@page "/Flights"
 <link rel="stylesheet" href="style.css" 
           class="css" />
 <center><h3>Flight Finder</h3></center>
 
 <div id="finder">
     <div class="from">
-        <label> From: </label>
-        <input type="text"
-               class="location-field"
-               placeholder="Any" />
+        <label>From:</label>
+        <select class="location-field" id="fromAirport">
+            <option value="">Any</option>
+            <!-- Loop through the list of airports and create an option element for each one -->
+            @foreach (var airport in AirportManager.GetAirports())
+            {
+                <option value="@airport.City">@airport.Name</option>
+            }
+        </select>
     </div>
 
     <div class="to">
-        <label> To: </label>
-        <input type="text"
-               class="location-field"
-               placeholder="Any" />
+        <label>To:</label>
+        <select class="location-field" id="toAirport">
+            <option value="">Any</option>
+            <!-- Loop through the list of airports and create an option element for each one -->
+            @foreach (var airport in AirportManager.GetAirports())
+            {
+                <option value="@airport.City">@airport.Name</option>
+            }
+        </select>
     </div>
 
     <div class="day">
-        <label> Day: </label>
-        <input type="text"
-               class="day-field"
-               placeholder="Any" />
+        <label>Day:</label>
+        <select class="day-field" id="travelDate">
+            <option value="">Any</option>
+            <!-- Loop through the list of unique days from the flights data and create an option element for each one -->
+            @foreach (var day in Flightmanager.GetFlights().Select(f => f.Day).Distinct())
+            {
+                <option value="@day">@day</option>
+            }
+        </select>
     </div>
 
-    <button type="button" class="btn">Find Flights</button>
+    <button type="button" class="btn" onclick="findFlights()">Find Flights</button>
 </div>
-
-
 
 
 
 <center><h3>Flights</h3></center>
 
 <div class="flights">
-    <input type="text"
-           class="flights-field"
-           placeholder="Loading..." />
+    <input type="text" class="flights-field" placeholder="Loading..." />
 </div>
+
 
 
 
