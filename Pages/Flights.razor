@@ -1,8 +1,8 @@
 ﻿@using MauiApp1.Data
 
 @page "/Flights"
-<link rel="stylesheet" href="style.css" 
-          class="css" />
+<link rel="stylesheet" href="style.css"
+      class="css" />
 <center><h3>Flight Finder</h3></center>
 
 <div id="finder">
@@ -37,25 +37,25 @@
             <!-- Loop through the list of unique days from the flights data and create an option element for each one -->
             @foreach (var day in Flightmanager.GetFlights().Select(f => f.Day).Distinct().OrderBy(d =>
             {
-                switch (d.ToLower())
-                {
-                    case "monday":
-                        return 1;
-                    case "tuesday":
-                        return 2;
-                    case "wednesday":
-                        return 3;
-                    case "thursday":
-                        return 4;
-                    case "friday":
-                        return 5;
-                    case "saturday":
-                        return 6;
-                    case "sunday":
-                        return 7;
-                    default:
-                        return int.MaxValue; // put unknown days at the end
-                }
+               switch (d.ToLower())
+               {
+                   case "monday":
+                       return 1;
+                   case "tuesday":
+                       return 2;
+                   case "wednesday":
+                       return 3;
+                   case "thursday":
+                       return 4;
+                   case "friday":
+                       return 5;
+                   case "saturday":
+                       return 6;
+                   case "sunday":
+                       return 7;
+                   default:
+                       return int.MaxValue; // put unknown days at the end
+               }
             }))
             {
                 <option value="@day">@day</option>
@@ -80,7 +80,7 @@
     {
         var filteredFlights = new List<Flight123>();
 
-        
+
         foreach (var flight in Flightmanager.GetFlights())
         {
             if (!string.IsNullOrEmpty(selectedFromAirport) && flight.FromCity != selectedFromAirport)
@@ -110,14 +110,21 @@
 
 <center><h3>Flights</h3></center>
 
+
+
+<center><h3>Flights</h3></center>
+
 @if (showFlights)
 {
     <div class="flights">
         <label>Select a flight:</label>
-        <select class="flights-field" name="flightCode">
+        <select class="flights-field" name="flightCode" @onchange="OnFlightSelected">
+            <option value="">Please select a flight from this list</option>
             @foreach (var flight in flights)
             {
-                <option value="@flight.FlightCode">@flight.Airline - From: @flight.FromCity, To: @flight.ToCity, Date: @flight.Day, Time: @flight.Time, Seats: @flight.Seat, Cost: @flight.Cost</option>
+                <option value="@flight.FlightCodes, @flight.Airline, @flight.FromCity, @flight.ToCity, @flight.Day, @flight.Time, @flight.Seat, @flight.Cost">
+                    @flight.FlightCodes, @flight.Airline, @flight.FromCity, @flight.ToCity, @flight.Day, @flight.Time, @flight.Seat, @flight.Cost
+                </option>
             }
         </select>
     </div>
@@ -141,43 +148,66 @@ else
     </div>
 }
 
-
 <h3 class="reserve-title">Reserve</h3>
 
 <div class="flightCode">
-    <label> Flight code: </label>
-    <input type="text"
-           class="flightCode-field"
-           placeholder="Flight" />
+    <label for="flightCodeInput">Flight code:</label>
+    <input type="text" class="flightCode-field" id="flightCodeInput" placeholder="Flight" value="@selectedFlightCode" readonly />
 </div>
 
 <div class="airline">
-    <label> Airline: </label>
-    <input type="text"
-           class="airline-field"
-           placeholder="Airline" />
+    <label>Airline:</label>
+    <input type="text" class="airline-field" placeholder="Airline" value="@selectedAirline" readonly />
 </div>
 
 <div class="day2">
-    <label> Day: </label>
-    <input type="text"
-           class="day2-field"
-           placeholder="Day" />
+    <label>Day:</label>
+    <input type="text" class="day2-field" placeholder="Day" value="@selectedDay" readonly />
 </div>
 
 <div class="time">
     <label> Time: </label>
-    <input type="text"
-           class="time-field"
-           placeholder="Time" />
+    <input type="text" class="time-field" placeholder="Time" value="@selectedTime" readonly />
 </div>
 
 <div class="cost">
     <label> Cost: </label>
-    <input type="text"
-           class="cost-field"
-           placeholder="0" />
+    <input type="text" class="cost-field" placeholder="0" @bind-value="cost" readonly />
+
 </div>
+
+@code {
+    string selectedFlightCode = "";
+    string selectedAirline = "";
+    string selectedDay = "";
+    string selectedTime = "";
+    decimal cost = 0;
+
+    void OnFlightSelected(ChangeEventArgs e)
+    {
+        var flightInfo = e.Value?.ToString()?.Split(',').Select(x => x.Trim()).ToList();
+
+        if (flightInfo == null || flightInfo.Count < 8)
+        {
+            // Reset the flight information fields to their default values
+            selectedFlightCode = "";
+            selectedAirline = "";
+            selectedDay = "";
+            selectedTime = "";
+            cost = 0;
+        }
+        else
+        {
+            // Set the flight information fields to the selected flight values
+            selectedFlightCode = flightInfo[0];
+            selectedAirline = flightInfo[1];
+            selectedDay = flightInfo[4];
+            selectedTime = flightInfo[5];
+            cost = decimal.Parse(flightInfo[7]);
+        }
+    }
+
+}
 
 <div class="name">
     <label> Name: </label>
