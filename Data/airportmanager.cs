@@ -41,5 +41,6 @@ namespace MauiApp1.Data
 
             return cities;
         }
+
     }
 }

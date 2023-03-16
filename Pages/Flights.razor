@@ -8,7 +8,7 @@
 <div id="finder">
     <div class="from">
         <label>From:</label>
-        <select class="location-field" id="fromAirport">
+        <select class="location-field" id="fromAirport" @bind="@selectedFromAirport">
             <option value="">Any</option>
             <!-- Loop through the list of airports and create an option element for each one -->
             @foreach (var airport in AirportManager.GetAirports())
@@ -20,19 +20,19 @@
 
     <div class="to">
         <label>To:</label>
-        <select class="location-field" id="toAirport">
+        <select class="location-field" id="toAirport" @bind="@SelectedToAirport">
             <option value="">Any</option>
             <!-- Loop through the list of airports and create an option element for each one -->
             @foreach (var airport in AirportManager.GetAirports())
             {
-                <option value="@airport.AirportName">@airport.AirportName</option>
+                <option value="@airport.AirportName">@airport.Shortform</option>
             }
         </select>
     </div>
 
     <div class="day">
         <label>Day:</label>
-        <select class="day-field" id="travelDate">
+        <select class="day-field" id="travelDate" @bind="@selectedTravelDate">
             <option value="">Any</option>
             <!-- Loop through the list of unique days from the flights data and create an option element for each one -->
             @foreach (var day in Flightmanager.GetFlights().Select(f => f.Day).Distinct())
@@ -42,24 +42,55 @@
         </select>
     </div>
 
-    <button type="button" class="btn" onclick="findFlights()">Find Flights</button>
+    <button class="btn" @onclick="FindFlights">Find Flights</button>
 </div>
 
+@code {
+    private bool showFlights = false;
+    private string selectedFromAirport { get; set; }
+    public string SelectedToAirport { get; set; }
+    public string selectedTravelDate { get; set; }
+    private List<Flight123> flights;
+
+    private void FindFlights()
+    {
+        if (string.IsNullOrEmpty(selectedFromAirport) || string.IsNullOrEmpty(SelectedToAirport) || string.IsNullOrEmpty(selectedTravelDate))
+        {
+            flights = Flightmanager.GetFlights();
+        }
+        else
+        {
+            flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport && f.ToCity == SelectedToAirport && f.Day == selectedTravelDate).ToList();
+        }
+        showFlights = flights.Any();
+    }
+}
 
 
 
 <center><h3>Flights</h3></center>
 
-<div class="flights">
-    <label>Select a flight:</label>
-    <select class="flights-field" name="flightCode">
-        <option value="">Loading...</option>
-        @foreach (var flight in Flightmanager.GetFlights())
-        {
-            <option value="@flight.Flightline">@flight.Flightline</option>
-        }
-    </select>
-</div>
+@if (showFlights)
+{
+    <div class="flights">
+        <label>Select a flight:</label>
+        <select class="flights-field" name="flightCode">
+            @foreach (var flight in flights)
+            {
+                <option value="@flight.FlightCode">@flight.Airline - From: @flight.FromCity, To: @flight.ToCity, Date: @flight.Day, Time: @flight.Time, Seats: @flight.Seat, Cost: @flight.Cost</option>
+            }
+        </select>
+    </div>
+}
+else
+{
+    <div class="flights">
+        <label>Select a flight:</label>
+        <select class="flights-field" name="flightCode">
+            <option value="">Loading...</option>
+        </select>
+    </div>
+}
 
 
 

@@ -8,9 +8,9 @@ namespace MauiApp1.Data
 {
     public class Flightmanager
     {
-        public static List<Flight> GetFlights()
+        public static List<Flight123> GetFlights()
         {
-            var flights = new List<Flight>();
+            var flights = new List<Flight123>();
 
             using (var reader = new StreamReader(@"C:\Users\mac_h\source\repos\monkeyV10\mauiassignmentfinal\Data\flights.csv"))
 
@@ -20,7 +20,7 @@ namespace MauiApp1.Data
                     var line = reader.ReadLine();
                     var values = line.Split(',');
 
-                    var flight = new Flight
+                    var flight = new Flight123
                     {
                         Flightline = line,
                         FlightCode = values[0],
@@ -38,8 +38,6 @@ namespace MauiApp1.Data
 
             return flights;
         }
-
-
 
     }
 }
