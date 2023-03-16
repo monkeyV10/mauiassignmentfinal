@@ -22,8 +22,9 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
-		builder.Services.AddSingleton<WeatherForecastService>();
+		builder.Services.AddSingleton<AirportManager>();
+        builder.Services.AddSingleton<Flightmanager>();
 
-		return builder.Build();
+        return builder.Build();
 	}
 }

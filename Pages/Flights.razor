@@ -1,47 +1,145 @@
-﻿@page "/Flights"
+﻿@using MauiApp1.Data
+
+@page "/Flights"
 <link rel="stylesheet" href="style.css" 
           class="css" />
 <center><h3>Flight Finder</h3></center>
 
 <div id="finder">
     <div class="from">
-        <label> From: </label>
-        <input type="text"
-               class="location-field"
-               placeholder="Any" />
+        <label>From:</label>
+        <select class="location-field" id="fromAirport" @bind="@selectedFromAirport">
+            <option value="">Any</option>
+            <!-- Loop through the list of airports and create an option element for each one -->
+            @foreach (var flight in Flightmanager.GetFlights())
+            {
+                <option value="@flight.FromCity">@flight.FromCity</option>
+            }
+        </select>
     </div>
 
     <div class="to">
-        <label> To: </label>
-        <input type="text"
-               class="location-field"
-               placeholder="Any" />
+        <label>To:</label>
+        <select class="location-field" id="toAirport" @bind="@SelectedToAirport">
+            <option value="">Any</option>
+            <!-- Loop through the list of airports and create an option element for each one -->
+            @foreach (var flight in Flightmanager.GetFlights())
+            {
+                <option value="@flight.ToCity">@flight.ToCity</option>
+            }
+        </select>
     </div>
 
     <div class="day">
-        <label> Day: </label>
-        <input type="text"
-               class="day-field"
-               placeholder="Any" />
+        <label>Day:</label>
+        <select class="day-field" id="travelDate" @bind="@selectedTravelDate">
+            <option value="">Any</option>
+            <!-- Loop through the list of unique days from the flights data and create an option element for each one -->
+            @foreach (var day in Flightmanager.GetFlights().Select(f => f.Day).Distinct().OrderBy(d =>
+            {
+                switch (d.ToLower())
+                {
+                    case "monday":
+                        return 1;
+                    case "tuesday":
+                        return 2;
+                    case "wednesday":
+                        return 3;
+                    case "thursday":
+                        return 4;
+                    case "friday":
+                        return 5;
+                    case "saturday":
+                        return 6;
+                    case "sunday":
+                        return 7;
+                    default:
+                        return int.MaxValue; // put unknown days at the end
+                }
+            }))
+            {
+                <option value="@day">@day</option>
+            }
+
+        </select>
     </div>
 
-    <button type="button" class="btn">Find Flights</button>
+
+    <button class="btn" @onclick="FindFlights">Find Flights</button>
 </div>
 
+@code {
+    private bool showFlights = false;
+    private string selectedFromAirport { get; set; }
+    public string SelectedToAirport { get; set; }
+    public string selectedTravelDate { get; set; }
+    private List<Flight123> flights;
+    private List<Airport> airports;
 
+    private void FindFlights()
+    {
+        var filteredFlights = new List<Flight123>();
 
+        
+        foreach (var flight in Flightmanager.GetFlights())
+        {
+            if (!string.IsNullOrEmpty(selectedFromAirport) && flight.FromCity != selectedFromAirport)
+            {
+                continue;
+            }
+
+            if (!string.IsNullOrEmpty(SelectedToAirport) && flight.ToCity != SelectedToAirport)
+            {
+                continue;
+            }
+
+            if (!string.IsNullOrEmpty(selectedTravelDate) && flight.Day != selectedTravelDate)
+            {
+                continue;
+            }
+
+            filteredFlights.Add(flight);
+        }
+
+        flights = filteredFlights;
+        showFlights = flights.Any();
+    }
+
+}
 
 
 <center><h3>Flights</h3></center>
 
-<div class="flights">
-    <input type="text"
-           class="flights-field"
-           placeholder="Loading..." />
-</div>
-
-
-
+@if (showFlights)
+{
+    <div class="flights">
+        <label>Select a flight:</label>
+        <select class="flights-field" name="flightCode">
+            @foreach (var flight in flights)
+            {
+                <option value="@flight.FlightCode">@flight.Airline - From: @flight.FromCity, To: @flight.ToCity, Date: @flight.Day, Time: @flight.Time, Seats: @flight.Seat, Cost: @flight.Cost</option>
+            }
+        </select>
+    </div>
+}
+else if (string.IsNullOrEmpty(selectedFromAirport) || string.IsNullOrEmpty(SelectedToAirport) || string.IsNullOrEmpty(selectedTravelDate))
+{
+    <div class="flights">
+        <label>Select a flight:</label>
+        <select class="flights-field" name="flightCode">
+            <option value="">Loading...</option>
+        </select>
+    </div>
+}
+else
+{
+    <div class="flights">
+        <label>Select a flight:</label>
+        <select class="flights-field" name="flightCode">
+            <option value="">There are no flights</option>
+        </select>
+    </div>
+}
 
 
 <h3 class="reserve-title">Reserve</h3>

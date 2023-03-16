@@ -37,7 +37,8 @@ label {
     box-sizing: border-box;
 }
 
-input[type=text] {
+input[type=text],
+select {
     width: 100%;
     display: inline-block;
     border: 1px solid #ccc;
