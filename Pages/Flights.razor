@@ -211,16 +211,15 @@ else
 
 <div class="name">
     <label> Name: </label>
-    <input type="text"
-           class="name-field"
-           placeholder="Name" />
+    <input type="text" class="name-field" placeholder="Name" @bind="name" />
 </div>
 
 <div class="citizenship">
-    <label> Citiizenship: </label>
+    <label> Citizenship: </label>
     <input type="text"
            class="citizenship-field"
-           placeholder="Citizenship" />
+           placeholder="Citizenship"
+           @bind="citizenship" />
 </div>
 
 <div class="reserve reserve-btn">
@@ -236,5 +235,16 @@ else
 
 
 @code {
+    string name = "";
+    string citizenship = "";
 
+    void OnNameInput(ChangeEventArgs e)
+    {
+        name = e.Value.ToString();
+    }
+
+    void OnCitizenshipInput(ChangeEventArgs e)
+    {
+        citizenship = e.Value.ToString();
+    }
 }
