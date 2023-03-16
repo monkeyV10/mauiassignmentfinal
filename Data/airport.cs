@@ -4,7 +4,7 @@ namespace MauiApp1.Data
 {
     public class Airport
     {
-        public string City { get; set; }
-        public string Name { get; set; }
+        public string Shortform { get; set; }
+        public string AirportName { get; set; }
     }
 }

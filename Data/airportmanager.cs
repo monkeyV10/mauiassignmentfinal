@@ -19,7 +19,7 @@ namespace MauiApp1.Data
                     var line = reader.ReadLine();
                     var values = line.Split(',');
 
-                    airports.Add(new Airport { City = values[0], Name = values[1] });
+                    airports.Add(new Airport { Shortform = values[0], AirportName = values[1] });
                 }
             }
 
@@ -33,9 +33,9 @@ namespace MauiApp1.Data
 
             foreach (var airport in airports)
             {
-                if (!cities.Contains(airport.City))
+                if (!cities.Contains(airport.Shortform))
                 {
-                    cities.Add(airport.City);
+                    cities.Add(airport.Shortform);
                 }
             }
 

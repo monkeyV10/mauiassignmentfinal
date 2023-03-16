@@ -22,7 +22,7 @@ namespace MauiApp1.Data
 
                     var flight = new Flight
                     {
-                        Flights = line,
+                        Flightline = line,
                         FlightCode = values[0],
                         Airline = values[1],
                         FromCity = values[2],
@@ -38,6 +38,8 @@ namespace MauiApp1.Data
 
             return flights;
         }
+
+
 
     }
 }

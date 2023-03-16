@@ -2,7 +2,7 @@ namespace MauiApp1.Data;
 
 public class Flight
 {
-    public string Flights { get; set; }
+    public string Flightline { get; set; }
     public string FlightCode { get; set; }
     public string Airline { get; set; }
     public string FromCity { get; set; }
