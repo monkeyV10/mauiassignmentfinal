@@ -26,21 +26,5 @@ namespace MauiApp1.Data
             return airports;
         }
 
-        public static List<string> GetCities()
-        {
-            var cities = new List<string>();
-            var airports = GetAirports();
-
-            foreach (var airport in airports)
-            {
-                if (!cities.Contains(airport.Shortform))
-                {
-                    cities.Add(airport.Shortform);
-                }
-            }
-
-            return cities;
-        }
-
     }
 }

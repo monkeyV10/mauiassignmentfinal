@@ -35,12 +35,35 @@
         <select class="day-field" id="travelDate" @bind="@selectedTravelDate">
             <option value="">Any</option>
             <!-- Loop through the list of unique days from the flights data and create an option element for each one -->
-            @foreach (var day in Flightmanager.GetFlights().Select(f => f.Day).Distinct())
+            @foreach (var day in Flightmanager.GetFlights().Select(f => f.Day).Distinct().OrderBy(d =>
+            {
+                switch (d.ToLower())
+                {
+                    case "monday":
+                        return 1;
+                    case "tuesday":
+                        return 2;
+                    case "wednesday":
+                        return 3;
+                    case "thursday":
+                        return 4;
+                    case "friday":
+                        return 5;
+                    case "saturday":
+                        return 6;
+                    case "sunday":
+                        return 7;
+                    default:
+                        return int.MaxValue; // put unknown days at the end
+                }
+            }))
             {
                 <option value="@day">@day</option>
             }
+
         </select>
     </div>
+
 
     <button class="btn" @onclick="FindFlights">Find Flights</button>
 </div>
@@ -51,20 +74,28 @@
     public string SelectedToAirport { get; set; }
     public string selectedTravelDate { get; set; }
     private List<Flight123> flights;
+    private List<Airport> airports;
 
     private void FindFlights()
     {
-        if (string.IsNullOrEmpty(selectedFromAirport) || string.IsNullOrEmpty(SelectedToAirport) || string.IsNullOrEmpty(selectedTravelDate))
+        if (selectedTravelDate == null)
         {
+            // If travel date is not selected, show all flights
             flights = Flightmanager.GetFlights();
         }
         else
         {
-            flights = Flightmanager.GetFlights().Where(f => f.FromCity == selectedFromAirport && f.ToCity == SelectedToAirport && f.Day == selectedTravelDate).ToList();
+            // If travel date is selected, filter flights based on FromCity, ToCity and Day
+            flights = Flightmanager.GetFlights()
+                        .Where(f => f.Day == selectedTravelDate)
+                        .ToList();
         }
         showFlights = flights.Any();
     }
+
+
 }
+
 
 
 
