@@ -74,7 +74,7 @@
     public string SelectedToAirport { get; set; }
     public string selectedTravelDate { get; set; }
     private List<Flight123> flights;
-    private List<Airport> airports;
+    
 
     private void FindFlights()
     {
@@ -220,12 +220,22 @@ else
 </div>
 
 <div class="reserve reserve-btn">
-    <button type="button" class="btn">Reserve</button><br />
+    <button type="button" class="btn" @onclick="GenerateReservationCode">Reserve</button>
+
     <div class="reservation-code">
-        <span>Reservation code: </span>
+        <span>Reservation code: </span>@reservationCode
     </div>
 </div>
 
+@code {
+    private string reservationCode;
+    private Reservation reservation = new Reservation();
+
+    private void GenerateReservationCode()
+    {
+        reservationCode = reservation.GenerateReservationCode();
+    }
+}
 
 
 
