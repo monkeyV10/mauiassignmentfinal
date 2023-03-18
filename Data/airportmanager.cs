@@ -12,7 +12,7 @@ namespace MauiApp1.Data
         {
             var airports = new List<Airport>();
 
-            using (var reader = new StreamReader(@"C:\Users\mac_h\source\repos\mauiassignmentfinal\Data\airports.csv"))
+            using (var reader = new StreamReader(@"C:\Users\mac_h\source\repos\monkeyV10\mauiassignmentfinal\Data\airports.csv"))
             {
                 while (!reader.EndOfStream)
                 {

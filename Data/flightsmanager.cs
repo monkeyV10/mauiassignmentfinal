@@ -12,7 +12,7 @@ namespace MauiApp1.Data
         {
             var flights = new List<Flight123>();
 
-            using (var reader = new StreamReader(@"C:\Users\mac_h\source\repos\mauiassignmentfinal\Data\flights.csv"))
+            using (var reader = new StreamReader(@"C:\Users\mac_h\source\repos\monkeyV10\mauiassignmentfinal\Data\flights.csv"))
 
             {
                 while (!reader.EndOfStream)

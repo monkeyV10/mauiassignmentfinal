@@ -233,8 +233,11 @@ else
 
     private void GenerateReservationCode()
     {
-        reservationCode = reservation.GenerateReservationCode();
+        var reservationCode = reservation.GenerateReservationCode();
+        reservation.SaveReservationData(selectedFlightCode, selectedAirline, selectedDay, selectedTime, cost, name, citizenship, reservationCode);
+        this.reservationCode = reservationCode;
     }
+
 }
 
 
