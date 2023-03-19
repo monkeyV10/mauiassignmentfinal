@@ -226,6 +226,8 @@
 
 
 @code {
+    private Reservation reservation = new Reservation();
+
     public void SaveReservation()
     {
         // Find the selected reservation
@@ -236,6 +238,32 @@
             // Update the reservation's name and citizenship values
             selectedReservation.Name = SelectedName;
             selectedReservation.Citizenship = SelectedCitizenship;
+
+            // Get all reservations
+            var reservations = reservation.GetReservationData();
+
+            // Update the reservation in the list
+            var index = reservations.FindIndex(r => r.ReservationCode == selectedReservation.ReservationCode);
+            reservations[index] = selectedReservation;
+
+            // Save the updated reservations list
+            var path = @"C:\Users\mac_h\source\repos\monkeyV10\mauiassignmentfinal\bin\reservations.bin";
+            using (var stream = new FileStream(path, FileMode.Create))
+            using (var writer = new BinaryWriter(stream))
+            {
+                foreach (var reservation in reservations)
+                {
+                    writer.Write(reservation.SelectedFlightCode);
+                    writer.Write(reservation.SelectedAirline);
+                    writer.Write(reservation.SelectedDay);
+                    writer.Write(reservation.SelectedTime);
+                    writer.Write(reservation.Cost);
+                    writer.Write(reservation.Name);
+                    writer.Write(reservation.Citizenship);
+                    writer.Write(reservation.ReservationCode);
+                    writer.Write('\n'); // Use newline character to separate the records
+                }
+            }
         }
     }
 }
