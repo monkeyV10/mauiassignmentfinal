@@ -47,7 +47,39 @@ namespace MauiApp1.Data
                 writer.Write(reservationData.Name);
                 writer.Write(reservationData.Citizenship);
                 writer.Write(reservationData.ReservationCode);
+                writer.Write('\n'); // Use newline character to separate the records
             }
+        }
+
+        public List<ReservationData> GetReservationData()
+        {
+            var reservationDataList = new List<ReservationData>();
+            var path = @"C:\Users\mac_h\source\repos\monkeyV10\mauiassignmentfinal\bin\reservations.bin";
+            using (var stream = new FileStream(path, FileMode.OpenOrCreate))
+            using (var reader = new BinaryReader(stream))
+            {
+                while (stream.Position < stream.Length) // Read until end of file
+                {
+                    var reservationData = new ReservationData
+                    {
+                        SelectedFlightCode = reader.ReadString(),
+                        SelectedAirline = reader.ReadString(),
+                        SelectedDay = reader.ReadString(),
+                        SelectedTime = reader.ReadString(),
+                        Cost = reader.ReadDecimal(),
+                        Name = reader.ReadString(),
+                        Citizenship = reader.ReadString(),
+                        ReservationCode = reader.ReadString(),
+                    };
+
+                    // Read the newline character to move to the next record
+                    reader.ReadChar();
+
+                    reservationDataList.Add(reservationData);
+                }
+            }
+
+            return reservationDataList;
         }
     }
 
@@ -62,6 +94,7 @@ namespace MauiApp1.Data
         public string Citizenship { get; set; }
         public string ReservationCode { get; set; }
     }
+
 }
 
 

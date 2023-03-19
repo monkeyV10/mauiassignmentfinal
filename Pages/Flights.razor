@@ -69,16 +69,61 @@
 </div>
 
 @code {
-    private bool showFlights = false;
+    public bool showFlights = false;
     private string selectedFromAirport { get; set; }
     public string SelectedToAirport { get; set; }
     public string selectedTravelDate { get; set; }
     private List<Flight123> flights;
     
+    string selectedFlightCodes = "";
+    string selectedAirline = "";
+    string selectedDay = "";
+    string selectedTime = "";
+    string FromCity = "";
+    string ToCity = "";
+    decimal cost = 0;
+
+    private string _selectedFlight;
+    public string SelectedFlight
+    {
+        get { return _selectedFlight; }
+        set
+        {
+            if (_selectedFlight != value)
+            {
+                _selectedFlight = value;
+                if (!string.IsNullOrEmpty(_selectedFlight))
+                {
+                    // Set the selected flight codes
+                    var parts = _selectedFlight.Split(',');
+                    selectedFlightCodes = parts[0].Trim();
+                    selectedAirline = parts[1].Trim();
+                    selectedDay = parts[4].Trim();
+                    selectedTime = parts[5].Trim();
+                    decimal.TryParse(parts[7].Trim(), out cost);
+                }
+            }
+        }
+    }
+
 
     private void FindFlights()
     {
+
         var filteredFlights = new List<Flight123>();
+
+        selectedFlightCodes = "";
+        selectedAirline = "";
+        selectedDay = "";
+        selectedTime = "";
+        cost = 0;
+        FromCity = "";
+        ToCity = "";
+        SelectedFlight = "";
+        
+
+
+        
 
 
         foreach (var flight in Flightmanager.GetFlights())
@@ -103,19 +148,31 @@
 
         flights = filteredFlights;
         showFlights = flights.Any();
+        SelectedFlight = "";
+
+        if (!flights.Any())
+        {
+            selectedFlightCodes = "";
+        }
+
+        SelectedFlight = "";
+
     }
 
 }
 
 
+
+
 <center><h3>Flights</h3></center>
 
 
-@if (showFlights)
+@if (showFlights == true)
 {
     <div class="flights">
         <label>Select a flight:</label>
-        <select class="flights-field" name="flightCode" @onchange="OnFlightSelected">
+        <select class="flights-field" name="flightCode"  @bind="@SelectedFlight">
+
             <option value="">Please select a flight from this list</option>
             @foreach (var flight in flights)
             {
@@ -123,15 +180,6 @@
                     @flight.FlightCodes, @flight.Airline, @flight.FromCity, @flight.ToCity, @flight.Day, @flight.Time, @flight.Seat, @flight.Cost
                 </option>
             }
-        </select>
-    </div>
-}
-else if (string.IsNullOrEmpty(selectedFromAirport) || string.IsNullOrEmpty(SelectedToAirport) || string.IsNullOrEmpty(selectedTravelDate))
-{
-    <div class="flights">
-        <label>Select a flight:</label>
-        <select class="flights-field" name="flightCode">
-            <option value="">Loading...</option>
         </select>
     </div>
 }
@@ -149,62 +197,34 @@ else
 
 <div class="flightCode">
     <label for="flightCodeInput">Flight code:</label>
-    <input type="text" class="flightCode-field" id="flightCodeInput" placeholder="Flight" value="@selectedFlightCode" readonly />
+    <input type="text" class="flightCode-field" id="flightCodeInput" placeholder="Flight" @bind="@selectedFlightCodes" readonly />
 </div>
 
 <div class="airline">
     <label>Airline:</label>
-    <input type="text" class="airline-field" placeholder="Airline" value="@selectedAirline" readonly />
+    <input type="text" class="airline-field" placeholder="Airline" @bind="@selectedAirline" readonly />
 </div>
+
 
 <div class="day2">
     <label>Day:</label>
-    <input type="text" class="day2-field" placeholder="Day" value="@selectedDay" readonly />
+    <input type="text" class="day2-field" placeholder="Day" @bind="@selectedDay" readonly />
 </div>
+
 
 <div class="time">
     <label> Time: </label>
-    <input type="text" class="time-field" placeholder="Time" value="@selectedTime" readonly />
+    <input type="text" class="time-field" placeholder="Time" @bind="@selectedTime" readonly />
 </div>
+
 
 <div class="cost">
     <label> Cost: </label>
     <input type="text" class="cost-field" placeholder="0" @bind-value="cost" readonly />
-
 </div>
 
-@code {
-    string selectedFlightCode = "";
-    string selectedAirline = "";
-    string selectedDay = "";
-    string selectedTime = "";
-    decimal cost = 0;
 
-    void OnFlightSelected(ChangeEventArgs e)
-    {
-        var flightInfo = e.Value?.ToString()?.Split(',').Select(x => x.Trim()).ToList();
 
-        if (flightInfo == null || flightInfo.Count < 8)
-        {
-            // Reset the flight information fields to their default values
-            selectedFlightCode = "";
-            selectedAirline = "";
-            selectedDay = "";
-            selectedTime = "";
-            cost = 0;
-        }
-        else
-        {
-            // Set the flight information fields to the selected flight values
-            selectedFlightCode = flightInfo[0];
-            selectedAirline = flightInfo[1];
-            selectedDay = flightInfo[4];
-            selectedTime = flightInfo[5];
-            cost = decimal.Parse(flightInfo[7]);
-        }
-    }
-
-}
 
 <div class="name">
     <label> Name: </label>
@@ -234,7 +254,7 @@ else
     private void GenerateReservationCode()
     {
         var reservationCode = reservation.GenerateReservationCode();
-        reservation.SaveReservationData(selectedFlightCode, selectedAirline, selectedDay, selectedTime, cost, name, citizenship, reservationCode);
+        reservation.SaveReservationData(selectedFlightCodes, selectedAirline, selectedDay, selectedTime, cost, name, citizenship, reservationCode);
         this.reservationCode = reservationCode;
     }
 

@@ -1,44 +1,147 @@
 ﻿@page "/Reservations"
-
+@using MauiApp1.Data
 
 
 <center><h3>Reservations Finder</h3></center>
 
 <div id="finder2">
     <div class="code">
-        <label> Code: </label>
-        <input type="text"
+        <label for="code-field"> Code: </label>
+        <input id="code-field"
+               type="text"
                class="code-field"
-               placeholder="Any" />
+               placeholder="Any"
+               @bind-value="@Code" />
     </div>
 
     <div class="airline2">
-        <label> Airline: </label>
-        <input type="text"
+        <label for="airline2-field"> Airline: </label>
+        <input id="airline2-field"
+               type="text"
                class="airline2-field"
-               placeholder="Any" />
+               placeholder="Any"
+               @bind-value="@Airline" />
     </div>
 
     <div class="name2">
-        <label> Name: </label>
-        <input type="text"
+        <label for="name2-field"> Name: </label>
+        <input id="name2-field"
+               type="text"
                class="name2-field"
-               placeholder="Any" />
+               placeholder="Any"
+               @bind-value="@Name" />
     </div>
 
-    <button type="button" class="btn">Find reservations</button>
+    <button class="btn" @onclick="FindReservations">Find Reservations</button>
 </div>
-
 
 
 <center><h3>Reservations</h3></center>
 
 <div class="reservations">
-    <input type="text"
-           class="reservaations-field"
-           placeholder="Loading..." />
+    @if (Reservationss == null || Reservationss.Count == 0)
+    {
+        <select class="reservations-field" disabled>
+            <option selected>Loading...</option>
+        </select>
+    }
+    else
+    {
+        <select class="reservations-field" @onchange="OnReservationSelectionChanged">
+            <option selected>Please select reservation</option>
+            @foreach (var reservation in Reservationss)
+            {
+                <option value="@GetReservationDisplayText(reservation)">@GetReservationDisplayText(reservation)</option>
+            }
+        </select>
+    }
 </div>
 
+
+
+
+
+@code {
+    private string Code { get; set; }
+    private string Airline { get; set; }
+    private string Name { get; set; }
+    private string SelectedReservationCode { get; set; }
+    private string SelectedAirlineCode { get; set; }
+    private string SelectedFlightCode { get; set; }
+    private string SelectedDay { get; set; }
+    private string SelectedCost { get; set; }
+    private string SelectedName { get; set; }
+    private string SelectedCitizenship { get; set; }
+    private List<ReservationData> Reservationss { get; set; } = new List<ReservationData>();
+
+    private void FindReservations()
+    {
+        var reservations = new Reservation().GetReservationData();
+
+        // Filter reservations based on user input
+        if (!string.IsNullOrEmpty(Code))
+        {
+            reservations = reservations.Where(r => r.ReservationCode == Code).ToList();
+        }
+
+        if (!string.IsNullOrEmpty(Airline))
+        {
+            reservations = reservations.Where(r => r.SelectedAirline == Airline).ToList();
+        }
+
+        if (!string.IsNullOrEmpty(Name))
+        {
+            reservations = reservations.Where(r => r.Name == Name).ToList();
+        }
+
+        // Display filtered reservations in the list control
+        Reservationss = reservations;
+    }
+
+    private string GetReservationDisplayText(ReservationData reservation)
+    {
+        return $"{reservation.ReservationCode}, {reservation.SelectedFlightCode}, {reservation.SelectedAirline}, {reservation.SelectedDay}, {reservation.Cost}, {reservation.Name}, {reservation.Citizenship}";
+    }
+
+    private void OnReservationSelectionChanged(ChangeEventArgs args)
+    {
+        var selectedReservationText = (string)args.Value;
+        if (selectedReservationText == "Please select reservation")
+        {
+            SelectedReservationCode = "";
+            SelectedFlightCode = "";
+            SelectedAirlineCode = "";
+            SelectedDay = "";
+            SelectedCost = "";
+            SelectedName = "";
+            SelectedCitizenship = "";
+            return;
+        }
+
+        var parts = selectedReservationText.Split(',');
+        if (parts.Length < 7)
+        {
+            // handle error
+            return;
+        }
+
+        var selectedReservationCode = parts[0].Trim();
+        var selectedFlightCode = parts[1].Trim();
+        var selectedAirlineCode = parts[2].Trim();
+        var selectedDay = parts[3].Trim();
+        var selectedCost = parts[4].Trim();
+        var selectedName = parts[5].Trim();
+        var selectedCitizenship = parts[6].Trim();
+        SelectedReservationCode = selectedReservationCode;
+        SelectedFlightCode = selectedFlightCode;
+        SelectedAirlineCode = selectedAirlineCode;
+        SelectedDay = selectedDay;
+        SelectedCost = selectedCost;
+        SelectedName = selectedName;
+        SelectedCitizenship = selectedCitizenship;
+    }
+
+}
 
 
 
@@ -49,42 +152,62 @@
     <label> Reservation code: </label>
     <input type="text"
            class="reservationCode-field"
-           placeholder="Flight" />
+           placeholder="Reservation Code"
+           readonly
+           @bind-value="SelectedReservationCode" />
 </div>
 
 <div class="flightCode2">
     <label> Flight code: </label>
     <input type="text"
            class="flightCode2-field"
-           placeholder="Airline" />
+           placeholder="flightCode"
+           readonly
+          @bind-value="SelectedFlightCode" />
 </div>
 
 <div class="airline2">
     <label> Airline: </label>
     <input type="text"
            class="airline2-field"
-           placeholder="Day" />
+           placeholder="Airline"
+           readonly
+           @bind-value="SelectedAirlineCode" />
 </div>
 
-<div class="cost2">
+
+<div class="day3">
+    <label> Day: </label>
+    <input type="text"
+           class="day3-field"
+           placeholder="Day" 
+           readonly
+           @bind-value="SelectedDay" />
+</div>
+
+<div class="cost3">
     <label> Cost: </label>
     <input type="text"
-           class="cost2-field"
-           placeholder="Time" />
+           class="cost3-field"
+           placeholder="0" 
+           readonly
+           @bind-value="SelectedCost" />
 </div>
 
 <div class="name3">
     <label> Name: </label>
     <input type="text"
            class="name3-field"
-           placeholder="0" />
+           placeholder="Name"
+           @bind-value="SelectedName" />
 </div>
 
 <div class="citizenship2">
     <label> Citizenship: </label>
     <input type="text"
            class="citizenship2-field"
-           placeholder="Name" />
+           placeholder="Citizenship"
+           @bind-value="SelectedCitizenship" />
 </div>
 
 <div class="status">
