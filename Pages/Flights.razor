@@ -253,6 +253,11 @@ else
 
     private void GenerateReservationCode()
     {
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(citizenship))
+        {
+            return;
+        }
+
         var reservationCode = reservation.GenerateReservationCode();
         reservation.SaveReservationData(selectedFlightCodes, selectedAirline, selectedDay, selectedTime, cost, name, citizenship, reservationCode);
         this.reservationCode = reservationCode;
