@@ -163,7 +163,7 @@
            class="flightCode2-field"
            placeholder="flightCode"
            readonly
-          @bind-value="SelectedFlightCode" />
+           @bind-value="SelectedFlightCode" />
 </div>
 
 <div class="airline2">
@@ -180,7 +180,7 @@
     <label> Day: </label>
     <input type="text"
            class="day3-field"
-           placeholder="Day" 
+           placeholder="Day"
            readonly
            @bind-value="SelectedDay" />
 </div>
@@ -189,7 +189,7 @@
     <label> Cost: </label>
     <input type="text"
            class="cost3-field"
-           placeholder="0" 
+           placeholder="0"
            readonly
            @bind-value="SelectedCost" />
 </div>
@@ -214,7 +214,6 @@
     <label> Status: </label>
     <input type="text"
            class="status-field"
-           
            placeholder="Active" />
 </div>
 
@@ -231,7 +230,7 @@
     {
         // Find the selected reservation
         var selectedReservation = Reservationss.FirstOrDefault(r => r.ReservationCode == SelectedReservationCode);
-        
+
         if (selectedReservation != null)
         {
             // Update the reservation's name and citizenship values

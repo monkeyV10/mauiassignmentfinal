@@ -86,8 +86,6 @@ namespace MauiApp1.Data
         }
     }
 
-    
+
 
 }
-
-
