@@ -214,12 +214,12 @@
     <label> Status: </label>
     <input type="text"
            class="status-field"
-           readonly
+           
            placeholder="Active" />
 </div>
 
 <div class="save">
-    <button type="button" class="btn">
+    <button type="button" class="btn" @onclick="SaveReservation">
         Save
     </button>
 </div>
@@ -227,6 +227,16 @@
 
 
 @code {
-    
-
+    public void SaveReservation()
+    {
+        // Find the selected reservation
+        var selectedReservation = Reservationss.FirstOrDefault(r => r.ReservationCode == SelectedReservationCode);
+        
+        if (selectedReservation != null)
+        {
+            // Update the reservation's name and citizenship values
+            selectedReservation.Name = SelectedName;
+            selectedReservation.Citizenship = SelectedCitizenship;
+        }
+    }
 }

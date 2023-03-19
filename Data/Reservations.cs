@@ -17,6 +17,8 @@ namespace MauiApp1.Data
             var reservationCode = $"{letters[random.Next(letters.Length)]}{random.Next(10)}{random.Next(10)}{random.Next(10)}{random.Next(10)}";
 
             return reservationCode;
+
+
         }
 
         public void SaveReservationData(string selectedFlightCode, string selectedAirline, string selectedDay, string selectedTime, decimal cost, string name, string citizenship, string reservationCode)
@@ -32,6 +34,7 @@ namespace MauiApp1.Data
                 Name = name,
                 Citizenship = citizenship,
                 ReservationCode = reservationCode
+
             };
 
             // Write the ReservationData object to binary file
