@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MauiApp1.Data
 {
-    public class Reservation
+    public class Reservation : ReservationData
     {
         public string GenerateReservationCode()
         {
@@ -35,7 +35,7 @@ namespace MauiApp1.Data
                 Citizenship = citizenship,
                 ReservationCode = reservationCode,
                 Status = "Active"
-                
+
 
             };
 
@@ -88,8 +88,10 @@ namespace MauiApp1.Data
 
             return reservationDataList;
         }
+
+        
+
+
+
     }
-
-
-
 }

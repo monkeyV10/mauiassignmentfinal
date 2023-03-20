@@ -102,6 +102,7 @@
         Reservationss = reservations;
     }
 
+    
     private string statusValue;
 
     private string GetReservationDisplayText(ReservationData reservation)
@@ -253,6 +254,7 @@
             selectedReservation.Name = SelectedName;
             selectedReservation.Citizenship = SelectedCitizenship;
 
+
             // Get all reservations
             var reservations = reservation.GetReservationData();
 
@@ -275,6 +277,7 @@
                     writer.Write(reservation.Name);
                     writer.Write(reservation.Citizenship);
                     writer.Write(reservation.ReservationCode);
+                    writer.Write(reservation.Status);
                     writer.Write('\n'); // Use newline character to separate the records
                 }
             }
