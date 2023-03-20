@@ -33,7 +33,9 @@ namespace MauiApp1.Data
                 Cost = cost,
                 Name = name,
                 Citizenship = citizenship,
-                ReservationCode = reservationCode
+                ReservationCode = reservationCode,
+                Status = "Active"
+                
 
             };
 
@@ -50,6 +52,7 @@ namespace MauiApp1.Data
                 writer.Write(reservationData.Name);
                 writer.Write(reservationData.Citizenship);
                 writer.Write(reservationData.ReservationCode);
+                writer.Write(reservationData.Status);
                 writer.Write('\n'); // Use newline character to separate the records
             }
         }
@@ -73,6 +76,7 @@ namespace MauiApp1.Data
                         Name = reader.ReadString(),
                         Citizenship = reader.ReadString(),
                         ReservationCode = reader.ReadString(),
+                        Status = reader.ReadString()
                     };
 
                     // Read the newline character to move to the next record

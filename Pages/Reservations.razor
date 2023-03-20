@@ -72,6 +72,10 @@
     private string SelectedCost { get; set; }
     private string SelectedName { get; set; }
     private string SelectedCitizenship { get; set; }
+
+    
+    
+    
     private List<ReservationData> Reservationss { get; set; } = new List<ReservationData>();
 
     private void FindReservations()
@@ -98,13 +102,17 @@
         Reservationss = reservations;
     }
 
+    private string statusValue;
+
     private string GetReservationDisplayText(ReservationData reservation)
     {
-        return $"{reservation.ReservationCode}, {reservation.SelectedFlightCode}, {reservation.SelectedAirline}, {reservation.SelectedDay}, {reservation.Cost}, {reservation.Name}, {reservation.Citizenship}";
+        return $"{reservation.ReservationCode}, {reservation.SelectedFlightCode}, {reservation.SelectedAirline}, {reservation.SelectedDay}, {reservation.Cost}, {reservation.Name}, {reservation.Citizenship}, {reservation.Status}";
     }
+
 
     private void OnReservationSelectionChanged(ChangeEventArgs args)
     {
+
         var selectedReservationText = (string)args.Value;
         if (selectedReservationText == "Please select reservation")
         {
@@ -115,11 +123,12 @@
             SelectedCost = "";
             SelectedName = "";
             SelectedCitizenship = "";
+
             return;
         }
 
         var parts = selectedReservationText.Split(',');
-        if (parts.Length < 7)
+        if (parts.Length < 8)
         {
             // handle error
             return;
@@ -132,6 +141,7 @@
         var selectedCost = parts[4].Trim();
         var selectedName = parts[5].Trim();
         var selectedCitizenship = parts[6].Trim();
+        var Status = parts[7].Trim();
         SelectedReservationCode = selectedReservationCode;
         SelectedFlightCode = selectedFlightCode;
         SelectedAirlineCode = selectedAirlineCode;
@@ -139,6 +149,9 @@
         SelectedCost = selectedCost;
         SelectedName = selectedName;
         SelectedCitizenship = selectedCitizenship;
+        statusValue = Status;
+        
+       
     }
 
 }
@@ -210,11 +223,12 @@
            @bind-value="SelectedCitizenship" />
 </div>
 
-<div class="status">
-    <label> Status: </label>
+<div class="status2">
+    <label>Status:</label>
     <input type="text"
            class="status-field"
-           placeholder="Active" />
+           placeholder="Active"
+           @bind-value="statusValue" />
 </div>
 
 <div class="save">

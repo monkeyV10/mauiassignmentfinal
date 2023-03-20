@@ -16,5 +16,6 @@ namespace MauiApp1.Data
         public string Name { get; set; }
         public string Citizenship { get; set; }
         public string ReservationCode { get; set; }
+        public string Status { get; set; } // Set default status to "Active"
     }
 }
